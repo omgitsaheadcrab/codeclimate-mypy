@@ -53,7 +53,7 @@ def analyze(python_files: list) -> str:
         successful_results = mypy_output[0]
 
         split_issues_on_newline = successful_results.split('\n')
-        del split_issues_on_newline[-1]
+        del split_issues_on_newline[-2:]
 
         for issue in split_issues_on_newline:
             line_number = re.search(line_number_regex, issue)
