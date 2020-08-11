@@ -8,7 +8,7 @@
 2. Enable the engine through the beta channel in your .codeclimate.yml file:
 
 ```
-engines:
+plugins:
   mypy:
     enabled: true
     channel: "beta"
