@@ -7,12 +7,12 @@ import os
 import sys
 from mypy import api
 
-line_number_regex = ":(\d+):"
-file_name_regex = "^(.+?):"
-issue_description_error_regex = "error(.*)"
-issue_description_note_regex = "note(.*)"
+LINE_NUMBER_REGEX = re.compile(r":(\d+):")
+FILE_NAME_REGEX = re.compile("^(.+?):")
+ISSUE_DESCRIPTION_ERROR_REGEX = re.compile("error(.*)")
+ISSUE_DESCRIPTION_NOTE_REGEX = re.compile("note(.*)")
 # need to add this regex in
-issue_description_warning_regex = "warning(.*)"
+ISSUE_DESCRIPTION_WARNING_REGEX = re.compile("warning(.*)")
 
 try:
     with open('/config.json') as config_file:
@@ -56,21 +56,21 @@ def analyze(python_files: list) -> str:
         del split_issues_on_newline[-2:]
 
         for issue in split_issues_on_newline:
-            line_number = re.search(line_number_regex, issue)
+            line_number = LINE_NUMBER_REGEX.search(issue)
             if line_number is not None:
                 line_number = line_number.group(1)
             else:
                 line_number = 1
 
-            file_name = re.search(file_name_regex, issue).group(1)
+            file_name = FILE_NAME_REGEX.search(issue).group(1)
 
-            issue_description = re.search(issue_description_error_regex, issue)
+            issue_description = ISSUE_DESCRIPTION_ERROR_REGEX.search(issue)
             if issue_description is not None:
                 issue_description = issue_description.group(1)
             elif issue_description is None:
-                issue_description = re.search(issue_description_note_regex, issue).group(1)
+                issue_description = ISSUE_DESCRIPTION_NOTE_REGEX.search(issue).group(1)
             else:
-                issue_description = re.search(issue_description_warning_regex, issue).group(1)
+                issue_description = ISSUE_DESCRIPTION_WARNING_REGEX.search(issue).group(1)
 
             codeclimate_json = dict()
             codeclimate_json['type'] = 'issue'
